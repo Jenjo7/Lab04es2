@@ -1,15 +1,21 @@
 package it.unibo.studio.savini.gianni.lab04es2;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
+
+    private final static int REQUEST_CODE = 101;
 
     private TextView txvProvider;
     private TextView txvLatitude;
@@ -25,7 +31,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txvLatitude = (TextView) findViewById(R.id.txv_latitude);
         txvLongitude = (TextView) findViewById(R.id.txv_longitude);
 
-        register();
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            register();
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+        }
+
     }
 
     private void register() {
